@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.snnu.startyun.dao.StudentCourseDao">
+    <!--<resultMap id="studentCourseMaps" type="StudentCourse">-->
+        <!--<result column="student_Id" property="studentId"/>-->
+        <!--<result column="course_Id" property="courseId"/>-->
+        <!--<result column="class_Id" property="classId"/>-->
+    <!--</resultMap>-->
+
+    <select id="queryCourseByStudentId" parameterType="java.lang.Integer" resultType="edu.snnu.startyun.entity.StudentCourse">
+        SELECT student_id,course_id,class_id FROM student_course WHERE student_id=#{id}
+    </select>
+
+
+
+
+
+</mapper>
