@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.snnu.startyun.dao.TeacherDao">
+
+    <select id="selectTeacherByOpenId" resultType="edu.snnu.startyun.entity.Teacher" parameterType="java.lang.String">
+        select * from teacher where open_id = #{openid}
+    </select>
+
+    <select id="selectTeacherById" parameterType="java.lang.Integer" resultType="edu.snnu.startyun.entity.Teacher">
+        select * from teacher where teacher_id = #{id}
+    </select>
+
+    <select id="teacherWebLogin" resultType="edu.snnu.startyun.entity.Teacher">
+        select * from teacher where teacher_id=#{id}
+    </select>
+
+    <update id="addPassword">
+        update teacher set password=#{password} where open_id=#{openId}
+    </update>
+
+    <insert id="teacherRegister">
+        insert into teacher(teacher_id, teacher_name, open_id) values (#{user.id},#{user.name},#{user.openId})
+    </insert>
+</mapper>

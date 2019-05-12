@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.snnu.startyun.dao.CourseDao">
+
+    <insert id="createCourse">
+        insert into course(course_id, course_name, teacher_id, course_info)
+        VALUES (#{courseId},#{courseName},#{teacherId},#{courseInfo})
+    </insert>
+
+    <resultMap type="edu.snnu.startyun.entity.Course" id="getCourseMsg">
+        <id column="course_id" property="courseId"/>
+        <result column="course_name" property="courseName"/>
+        <result column="teacher_id" property="teacherId"/>
+        <collection property="classes" ofType="edu.snnu.startyun.entity.Class">
+            <id column="class_id" property="classId"/>
+            <result column="class_name" property="className"/>
+        </collection>
+    </resultMap>
+
+    <select id="getAllCourse" parameterType="java.lang.Integer" resultMap="getCourseMsg">
+        select
+               s.course_id,
+               s.course_name,
+               s.teacher_id,
+               c.class_id,
+               c.class_name
+        from course s
+          left join class c
+            on
+              s.course_id=c.course_id
+        where s.teacher_id=#{teacherId};
+    </select>
+
+    <!--<select id="getAllClass" resultType="edu.snnu.startyun.entity.Class">
+        select * from class where course_id=#{courseId}
+    </select>-->
+
+    <update id="updateCourseName">
+        update course set course_name=#{newName} where course_id=#{id}
+    </update>
+
+    <select id="getOneCourse" resultType="edu.snnu.startyun.entity.Course">
+        select * from course where course_id=#{courseId}
+    </select>
+
+</mapper>

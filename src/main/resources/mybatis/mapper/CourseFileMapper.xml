@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.snnu.startyun.dao.CourseFileDao">
+
+    <insert id="uploadFile">
+        insert into ${tableName} (course_id,file_id,file,file_name,file_suffix,desc)
+        values (#{courseFile.courseId},#{courseFile.fileId},#{courseFile.file},#{courseFile.fileName},#{courseFile.suffix},#{courseFile.desc})
+    </insert>
+
+    <select id="downloadFile" resultType="edu.snnu.startyun.entity.CourseFile">
+        select * from ${tableName} where file_id=#{fileId}
+    </select>
+
+    <insert id="assignFile">
+        insert into ${targetTable}
+        select c.file_id,c.course_id,cls.class_id,c.file
+        from ${rootTable} c,
+             (select c.class_id
+             from
+                  (select * from class where course_id=#{classFile.courseId}) c)
+               cls
+        where cls.class_id=#{classFile.classId} and c.file_id=#{classFile.fileId};
+    </insert>
+
+
+
+</mapper>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.snnu.startyun.dao.ClassDao">
+    <resultMap type="edu.snnu.startyun.entity.Class" id="getCourse">
+        <id column="class_id" property="classId"/>
+        <result column="class_name" property="className"/>
+        <result column="course_id" property="courseId"/>
+        <result column="course_id" property="course.courseId"/>
+        <result column="course_name" property="course.courseName"/>
+    </resultMap>
+
+    <sql id="key">
+        <trim suffixOverrides=",">
+            <if test="classId!=null">
+                class_id,</if>
+            <if test="className!=null">
+                class_name,
+            </if>
+            <if test="courseId!=null">
+                course_id,
+            </if>
+            <if test="classRoom!=null">
+                class_room,</if>
+            <if test="classTime!=null">
+                class_time,
+            </if>
+            <if test="classWeek!=null">
+                class_week,
+            </if>
+            <if test="classDay!=null">
+                class_day,
+            </if>
+        </trim>
+    </sql>
+    <sql id="value">
+        <trim suffixOverrides=",">
+            <if test="classId!=null">
+                #{classId},</if>
+            <if test="className!=null">
+                #{className},
+            </if>
+            <if test="courseId!=null">
+                #{courseId},
+            </if>
+            <if test="classRoom!=null">
+                #{classRoom},</if>
+            <if test="classTime!=null">
+                #{classTime},
+            </if>
+            <if test="classWeek!=null">
+                #{classWeek},
+            </if>
+            <if test="classDay!=null">
+                #{classDay},
+            </if>
+        </trim>
+    </sql>
+
+    <insert id="createClass">
+        insert into class(<include refid="key"/>)
+        VALUES (<include refid="value"/>)
+    </insert>
+
+    <select id="getAllClass" resultType="edu.snnu.startyun.entity.Class" parameterType="java.lang.Integer" resultMap="getCourse">
+        select
+               c.class_id,
+               c.class_name,
+               c.course_id,
+               cc.course_id,
+               cc.course_name
+        from
+             class c left join course cc
+               on c.course_id=cc.course_id
+        where
+              c.course_id=#{id}
+    </select>
+
+    <select id="getAllStudent" resultType="edu.snnu.startyun.entity.Student">
+        select student_id,student_name,total_grade from
+            (select s.student_id,s.student_name,sc.course_id,sc.class_id,sc.total_grade from student s
+            left join student_course sc on s.student_id = sc.student_id) ss
+        where ss.course_id=#{courseId} and ss.class_id=#{classId} ORDER BY total_grade DESC;
+    </select>
+
+    <select id="getClassInCourse" resultType="edu.snnu.startyun.entity.Class">
+        select * from class where course_id=#{id}
+    </select>
+
+    <delete id="delClassStudent">
+        delete from student_course where course_id=#{courseId} and class_id=#{classId}
+    </delete>
+    <delete id="delClass">
+        delete from class where course_id=#{courseId} and class_id=#{classId}
+    </delete>
+
+    <select id="getClassByClassId" parameterType="java.lang.Integer" resultType="edu.snnu.startyun.entity.Class">
+        SELECT *
+        FROM class
+        WHERE class_id = #{classid}
+    </select>
+</mapper>
